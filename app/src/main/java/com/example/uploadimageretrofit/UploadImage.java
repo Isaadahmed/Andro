@@ -38,7 +38,7 @@ public class UploadImage extends AppCompatActivity {
 
     private static final int PICK_IMAGE_REQUEST = 1;
 
-    final int IMAGE_REQUEST_CODE = 999;
+    final int IMAGE_REQUEST_CODE = 21;
     private ProgressBar progressBar;
     private Uri filepath;
     private Bitmap bitmap;
@@ -79,7 +79,6 @@ public class UploadImage extends AppCompatActivity {
             if (grantResults.length>0&& grantResults[0]== PackageManager.PERMISSION_GRANTED){
                 Intent intent=new Intent(new Intent(Intent.ACTION_PICK));
                 intent.setType("image/*");
-
                 startActivityForResult(Intent.createChooser(intent,"select image"),IMAGE_REQUEST_CODE);
 
             }
@@ -91,6 +90,7 @@ public class UploadImage extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode==IMAGE_REQUEST_CODE && resultCode==RESULT_OK && data!=null){
             filepath=data.getData();
+            Toast.makeText(this, "", Toast.LENGTH_SHORT).show();
             try {
                 InputStream inputStream=getContentResolver().openInputStream(filepath);
                 bitmap= BitmapFactory.decodeStream(inputStream);
@@ -119,7 +119,7 @@ public class UploadImage extends AppCompatActivity {
                 try {
                     String hi=response.body().string();
 
-                    Toast.makeText(UploadImage.this,hi, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(UploadImage.this,hi, Toast.LENGTH_LONG).show();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -127,6 +127,7 @@ public class UploadImage extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Toast.makeText(UploadImage.this, t.getMessage(), Toast.LENGTH_LONG).show();
 
             }
         });
